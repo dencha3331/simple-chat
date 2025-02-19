@@ -1,0 +1,19 @@
+services:
+  simple_chat:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: simple_chat
+    ports:
+      - "${APP_CONFIG__RUN__PORT}:8000"
+    command: "uvicorn main:app --reload --host 0.0.0.0 --port 8000"
+    env_file:
+      - ../.env
+    volumes:
+      - ../app/:/app/
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
