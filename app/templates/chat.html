@@ -1,0 +1,26 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Chat</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='chat_styles.css') }}">
+
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">
+      <h1>Сообщения</h1>
+    </div>
+    
+    <div class="messages-list" id="messagesList">
+    </div>
+
+    <form class="message-form" id="messageForm">
+      <input type="text" id="messageInput" placeholder="Введите сообщение..." autocomplete="off">
+      <button type="submit">Отправить</button>
+    </form>
+  </div>
+  
+  <script src="{{ url_for('static', path='chat_main.js') }}"></script>
+</body>
+</html>
