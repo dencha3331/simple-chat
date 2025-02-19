@@ -18,7 +18,7 @@ Simple Chat - простое приложение для демонстраци�
 
 Клонировать репозиторий: 
 ``` bash
-git clone https://github.com/username/simple-chat.git`
+git clone https://github.com/username/simple-chat.git
 cd simple-chat
 ```
 
