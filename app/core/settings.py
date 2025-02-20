@@ -10,19 +10,24 @@ BASE_DIR = Path(__file__).parent.parent
 
 
 class RunConfig(BaseModel):
-    host: str = "0.0.0.0"
-    port: int = 8000
+    host: str
+    port: int
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=("../.env.template", "../.env", ".env.template", ".env"),
+        env_file=(
+            BASE_DIR.parent.joinpath(".env.example"),
+            BASE_DIR.parent.joinpath(".env"),
+            BASE_DIR.joinpath(".env.example"),
+            BASE_DIR.joinpath(".env"),
+        ),
         case_sensitive=False,
         env_nested_delimiter="__",
         env_prefix="APP_CONFIG__",
         extra="ignore",
     )
-    run: RunConfig = RunConfig()
+    run: RunConfig
 
 
 settings = Settings()
