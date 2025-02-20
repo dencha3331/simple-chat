@@ -1,26 +1,25 @@
 from fastapi import WebSocket
 from pydantic import ValidationError
+from websockets import ConnectionClosed
 
 from core.schemas import websockets as ws_schemas
 
 
 class ChatWebSocketManager:
-    def __init__(self):
-        self.connections: list[WebSocket] = []
+    def __init__(self, websocket: WebSocket):
+        self.connection: WebSocket = websocket
         self.message_id = 1
 
-    async def connect(self, websocket: WebSocket):
-        await websocket.accept()
-        self.connections.append(websocket)
+    async def connect(self):
+        await self.connection.accept()
 
-    async def disconnect(self, websocket: WebSocket):
-        self.connections.remove(websocket)
+    async def disconnect(self):
         try:
-            await websocket.close()
+            await self.connection.close()
         except RuntimeError:
-            pass
+            print("Сокет-соединение уже закрыто.")
 
-    async def broadcast(self, data: dict):
+    async def send_message_to_chat(self, data: dict):
         try:
             message_data = ws_schemas.ChatWSRequestSchema.model_validate(data)
             response = ws_schemas.ChatWSResponseSchema(
@@ -33,7 +32,8 @@ class ChatWebSocketManager:
                 message="Ошибка обработки данных"
             )
 
-        self.message_id += 1
-
-        for connection in self.connections:
-            await connection.send_json(response.model_dump())
+        try:
+            self.message_id += 1
+            await self.connection.send_json(response.model_dump())
+        except ConnectionClosed:
+            print("Сокет-соединение прервано")

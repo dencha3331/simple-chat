@@ -1,15 +1,15 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class ChatWSRequestSchema(BaseModel):
-    message: str = Field()
+    message: str
 
 
 class ChatWSResponseSchema(BaseModel):
-    number: int = Field()
-    message: str = Field()
+    number: int
+    message: str
 
 
 class ChatWSErrorSchema(BaseModel):
-    number: int = Field()
-    message: str = Field()
+    number: int
+    message: str

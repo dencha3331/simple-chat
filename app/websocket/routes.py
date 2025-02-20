@@ -11,18 +11,18 @@ router = APIRouter(
 @router.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
 
-    ws_manager = ChatWebSocketManager()
-    await ws_manager.connect(websocket)
+    ws_manager = ChatWebSocketManager(websocket)
+    await ws_manager.connect()
 
     try:
         while True:
 
             data = await websocket.receive_json()
-            await ws_manager.broadcast(data)
+            await ws_manager.send_message_to_chat(data)
 
     except WebSocketDisconnect:
-        await ws_manager.disconnect(websocket)
+        await ws_manager.disconnect()
     except Exception as e:
         print(f"Error: {e!r}")
-        await websocket.close()
+        await ws_manager.disconnect()
 
